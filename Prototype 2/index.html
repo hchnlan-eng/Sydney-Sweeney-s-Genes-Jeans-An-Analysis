@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sydney Sweeney’s Genes: An Analysis</title>
+
+  <!-- Google Fonts: Antonio (600, 700), IBM Plex Sans (400, 500, 600), IBM Plex Mono (400, 500) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Antonio:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#0E0F11',
+            surface: '#15171A',
+            ink: '#F2EFE9',
+            muted: '#9A9893',
+            hairline: '#282B30',
+            brass: '#C8B89D',
+            sage: '#7BAE8B',
+            terracotta: '#C9736B',
+          },
+          fontFamily: {
+            display: ['"Antonio"', 'sans-serif'],
+            sans: ['"IBM Plex Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* =========================================================================
+       1. DESIGN TOKENS & STRICT TYPOGRAPHIC ROLES
+       - Antonio (700, tracking -0.01em): Reserved EXCLUSIVELY for titles and
+         subtitles. Never used on quotes or body text.
+       - IBM Plex Sans: Used for ALL body prose (18px, line-height 1.6), UI
+         buttons, dropzones, and ALL blockquotes / inline quotes.
+       - IBM Plex Mono: Used for citations, grammatical role tags, timecodes,
+         and register captions (“Instagram”, “Podcast”).
+       ========================================================================= */
+    :root {
+      --bg-canvas: #0E0F11;
+      --bg-surface: #15171A;
+      --ink-primary: #F2EFE9;
+      --ink-muted: #9A9893;
+      --border-hairline: #282B30;
+      --accent-brass: #C8B89D;
+      --accent-sage: #7BAE8B;
+      --accent-terracotta: #C9736B;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      text-shadow: none !important;
+    }
+
+    html,
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-canvas);
+      color: var(--ink-primary);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Titles & Subtitles ONLY: Antonio 700 */
+    .title-antonio {
+      font-family: 'Antonio', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    /* Metadata, Citations, Timecodes & Register Captions: IBM Plex Mono */
+    .meta-mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* =========================================================================
+       2. TRANSLUCENT DARK-GREY VIDEO OVERLAYS (.glass-overlay)
+       ========================================================================= */
+    .glass-overlay {
+      background: rgba(21, 23, 26, 0.50);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* =========================================================================
+       3. SLIDING BRASS TAB INDICATOR & STAGE TRANSITIONS
+       ========================================================================= */
+    #tab-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      border-radius: 9999px;
+      background-color: var(--accent-brass);
+      transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+                  width 240ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, width;
+      pointer-events: none;
+    }
+
+    .stage-pane {
+      transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .stage-hidden {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .stage-visible {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    /* =========================================================================
+       4. COLLAPSIBLE RIGHT-HAND ANALYSIS DRAWER (440px OPEN, COLLAPSED DEFAULT)
+       ========================================================================= */
+    #analysis-drawer {
+      width: 0px;
+      margin-left: 0px;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-width: 0px;
+      transition: width 240ms cubic-bezier(0.22, 1, 0.36, 1),
+                  margin-left 240ms cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: width, margin-left, opacity;
+    }
+
+    #analysis-drawer.drawer-open {
+      width: 440px;
+      margin-left: 20px;
+      opacity: 1;
+      pointer-events: auto;
+      border-width: 1px;
+    }
+
+    @media (max-width: 1024px) {
+      #analysis-drawer {
+        position: fixed;
+        top: 80px;
+        right: 16px;
+        bottom: 16px;
+        z-index: 40;
+        margin-left: 0px !important;
+      }
+      #analysis-drawer.drawer-open {
+        width: min(calc(100vw - 32px), 440px);
+      }
+    }
+
+    .drawer-fade {
+      animation: drawerEnter 220ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes drawerEnter {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================================================================
+       5. DIAGRAMMATIC VIDEO HUD OVERLAYS & ACOUSTIC PROXIMITY BARS
+       ========================================================================= */
+    .hud-layer {
+      transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hud-hidden {
+      opacity: 0;
+      transform: translateY(5px);
+      pointer-events: none;
+    }
+
+    .hud-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 12-Bar Acoustic Proximity Waveform Meter (HUD 2) */
+    .eq-bar {
+      width: 3px;
+      border-radius: 9999px;
+      background-color: #C8B89D;
+      transform-origin: bottom;
+      transition: height 180ms ease, opacity 180ms ease;
+    }
+
+    .eq-playing .eq-bar {
+      animation: eqPulse 920ms ease-in-out infinite alternate;
+    }
+
+    @keyframes eqPulse {
+      0% {
+        transform: scaleY(0.32);
+        opacity: 0.65;
+      }
+      100% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+    }
+
+    /* Upward Camera Tracking Pulse (HUD 1) */
+    .pan-chevron {
+      animation: panRise 1.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+
+    @keyframes panRise {
+      0% {
+        opacity: 0.25;
+        transform: translateY(6px);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+      100% {
+        opacity: 0.25;
+        transform: translateY(-6px);
+      }
+    }
+
+    /* =========================================================================
+       6. CUSTOM ROUNDED RANGE SCRUBBERS
+       ========================================================================= */
+    input[type='range'].video-scrubber {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 9999px;
+      background: #282B30;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type='range'].video-scrubber::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+      background: #F2EFE9;
+      border: 2px solid #C8B89D;
+      cursor: pointer;
+      position: relative;
+      z-index: 20;
+      transition: transform 150ms ease;
+    }
+
+    input[type='range'].video-scrubber::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+
+    input[type='range'].video-scrubber::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+      background: #F2EFE9;
+      border: 2px solid #C8B89D;
+      cursor: pointer;
+      position: relative;
+      z-index: 20;
+    }
+
+    /* =========================================================================
+       7. CLICK-TO-FLIP 3D ALIBI VS. REBUTTAL CARDS (TAB 3)
+       ========================================================================= */
+    .flip-card-scene {
+      perspective: 1200px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .flip-card-scene.is-flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-face {
+      grid-area: 1 / 1;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Drag-and-Drop Active State */
+    .dropzone-active {
+      border-color: var(--accent-brass) !important;
+      background-color: #15171A !important;
+    }
+
+    /* Accessible Focus Ring */
+    button:focus-visible,
+    [role='button']:focus-visible,
+    input[type='range']:focus-visible {
+      outline: 1.5px solid var(--accent-brass);
+      outline-offset: 2px;
+    }
+
+    /* Subtle Dark Scrollbars */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #15171A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #282B30;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen lg:h-screen w-full lg:overflow-hidden flex flex-col bg-[#0E0F11] text-[#F2EFE9] font-sans selection:bg-[#C8B89D] selection:text-[#0E0F11]">
+
+  <!-- =========================================================================
+       TOP HEADER BAR (64px HEIGHT)
+       ========================================================================= -->
+  <header class="h-[64px] w-full bg-[#0E0F11] border-b border-[#282B30] px-4 sm:px-7 flex items-center justify-between gap-3 shrink-0 z-30">
+    
+    <!-- Left: Main Header Title in Antonio 700 -->
+    <div class="min-w-0 flex items-center">
+      <h1 class="title-antonio text-[20px] sm:text-[24px] text-[#F2EFE9] truncate select-none">
+        Sydney Sweeney’s Genes: An Analysis
+      </h1>
+    </div>
+
+    <!-- Center: Three Navigation Tabs in Antonio 700 with Sliding Brass Underline -->
+    <nav id="primary-nav" aria-label="Analytical sections" class="relative h-full flex items-center gap-5 sm:gap-9 shrink-0">
+      <button
+        type="button"
+        data-tab="0"
+        aria-selected="true"
+        class="tab-btn title-antonio h-full flex items-center text-[19px] sm:text-[24px] text-[#F2EFE9] transition-colors duration-200 whitespace-nowrap"
+      >
+        Voyeurism
+      </button>
+      <button
+        type="button"
+        data-tab="1"
+        aria-selected="false"
+        class="tab-btn title-antonio h-full flex items-center text-[19px] sm:text-[24px] text-[#9A9893] hover:text-[#F2EFE9] transition-colors duration-200 whitespace-nowrap"
+      >
+        Hierarchy
+      </button>
+      <button
+        type="button"
+        data-tab="2"
+        aria-selected="false"
+        class="tab-btn title-antonio h-full flex items-center text-[19px] sm:text-[24px] text-[#9A9893] hover:text-[#F2EFE9] transition-colors duration-200 whitespace-nowrap"
+      >
+        Post-feminist alibis
+      </button>
+
+      <!-- Sliding Vintage Brass Indicator -->
+      <div id="tab-indicator" aria-hidden="true"></div>
+    </nav>
+
+    <!-- Right: Contextual Overlay Toggle (O) + Collapsible Drawer Toggle (A) in IBM Plex Sans -->
+    <div class="shrink-0 flex items-center gap-2 sm:gap-3">
+      
+      <!-- Contextual Overlay Button (“Gaze overlay” on Voyeurism; “Grammar overlay” on Hierarchy; hidden on Post-feminist alibis) -->
+      <button
+        type="button"
+        id="btn-overlay-toggle"
+        aria-pressed="false"
+        title="Toggle analytical overlay (Shortcut: O)"
+        class="font-sans font-medium h-10 px-4 rounded-lg border border-[#282B30] bg-[#15171A] hover:border-[#C8B89D] text-[#F2EFE9] text-[14px] transition-colors duration-200 whitespace-nowrap"
+      >
+        Gaze overlay
+      </button>
+
+      <!-- Collapsible Right-Hand Analysis Drawer Toggle (Shortcut: A) -->
+      <button
+        type="button"
+        id="drawer-toggle-btn"
+        aria-expanded="false"
+        aria-controls="analysis-drawer"
+        title="Toggle analysis drawer (Shortcut: A)"
+        class="font-sans font-medium h-10 px-4 rounded-lg border border-[#282B30] bg-[#15171A] hover:border-[#C8B89D] text-[#F2EFE9] flex items-center gap-2.5 text-[14px] transition-colors duration-200 whitespace-nowrap"
+      >
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="shrink-0">
+          <rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.25" />
+          <line x1="10" y1="2.5" x2="10" y2="13.5" stroke="currentColor" stroke-width="1.25" />
+        </svg>
+        <span id="drawer-toggle-label">Show analysis</span>
+        <span id="drawer-status-dot" class="w-1.5 h-1.5 rounded-full bg-[#9A9893] transition-colors duration-200"></span>
+      </button>
+
+    </div>
+
+  </header>
+
+  <!-- =========================================================================
+       MAIN WORKSPACE (100% WIDTH PRIMARY STAGE + COLLAPSIBLE 440px DRAWER)
+       ========================================================================= -->
+  <main class="flex-1 w-full lg:h-[calc(100vh-64px)] flex flex-row p-4 sm:p-5 lg:overflow-hidden relative bg-[#0E0F11]">
+
+    <!-- =======================================================================
+         PRIMARY EXHIBITION STAGE
+         ======================================================================= -->
+    <section aria-label="Presentation stage" class="flex-1 min-h-[calc(100vh-104px)] lg:min-h-0 lg:h-full min-w-0 relative lg:overflow-hidden">
+
+      <!-- =====================================================================
+           STAGE A: SHARED 16:9 VIDEO STAGE (TAB 1 “VOYEURISM” & TAB 2 “HIERARCHY”)
+           ===================================================================== -->
+      <div id="video-stage-pane" class="stage-pane stage-visible lg:absolute lg:inset-0 w-full h-full">
+        <div class="w-full h-full flex flex-col rounded-2xl border border-[#282B30] bg-[#15171A] overflow-hidden">
+
+          <!-- 16:9 Widescreen Media Frame Container -->
+          <div class="flex-1 w-full min-h-[300px] lg:min-h-0 relative flex items-center justify-center bg-[#0E0F11] p-3 sm:p-4 overflow-hidden">
+            
+            <!-- 16:9 Aspect Stage Box -->
+            <div class="w-full h-full max-w-[calc((100vh-222px)*16/9)] aspect-video relative flex items-center justify-center rounded-xl overflow-hidden bg-[#0E0F11]">
+              
+              <!-- Shared Primary Video Element (NO hardcoded src; assigned in JS after listeners attach) -->
+              <video
+                id="primary-video"
+                class="hidden w-full h-full object-contain bg-[#0E0F11] cursor-pointer"
+                preload="auto"
+                playsinline
+              ></video>
+
+              <!-- Drag-and-Drop / Click-to-Browse Fallback Dropzone -->
+              <div
+                id="video-dropzone"
+                role="button"
+                tabindex="0"
+                aria-label="Drop 2025 American Eagle commercial .mp4 here or click to browse"
+                class="w-full h-full rounded-xl border border-dashed border-[#282B30] bg-[#15171A]/70 hover:border-[#C8B89D] flex flex-col items-center justify-center p-8 text-center cursor-pointer transition-colors duration-200"
+              >
+                <div class="w-12 h-12 rounded-xl border border-[#282B30] bg-[#0E0F11] flex items-center justify-center mb-4 text-[#C8B89D]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 16V4M12 4L7.5 8.5M12 4L16.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M4 15V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <p class="font-sans font-medium text-[18px] text-[#F2EFE9] mb-1.5">
+                  Drop 2025 American Eagle commercial (.mp4) here or click to select
+                </p>
+                <p id="primary-autoload-status" class="meta-mono text-[13px] text-[#9A9893]">
+                  Checking folder for sydney.mp4…
+                </p>
+              </div>
+
+              <input id="video-file-input" type="file" accept="video/*" class="hidden" />
+
+              <!-- ===============================================================
+                   MINIMAL 3-PILL HUD STEPPER (TOP-LEFT ON TAB 1 WHEN GAZE OVERLAY ACTIVE)
+                   Allows stepping cleanly through HUD 1 / HUD 2 / HUD 3
+                   =============================================================== -->
+              <div
+                id="gaze-hud-switcher"
+                role="group"
+                aria-label="Diagrammatic HUD selector"
+                class="hud-layer hud-hidden pointer-events-auto absolute top-4 left-4 z-20 glass-overlay rounded-xl p-1 flex items-center gap-1"
+              >
+                <button
+                  type="button"
+                  data-hud-step="1"
+                  class="hud-step-btn meta-mono text-[11.5px] px-2.5 py-1 rounded-lg text-[#9A9893] hover:text-[#F2EFE9] transition-colors"
+                >
+                  HUD 1
+                </button>
+                <button
+                  type="button"
+                  data-hud-step="2"
+                  class="hud-step-btn meta-mono text-[11.5px] px-2.5 py-1 rounded-lg text-[#9A9893] hover:text-[#F2EFE9] transition-colors"
+                >
+                  HUD 2
+                </button>
+                <button
+                  type="button"
+                  data-hud-step="3"
+                  class="hud-step-btn meta-mono text-[11.5px] px-2.5 py-1 rounded-lg text-[#9A9893] hover:text-[#F2EFE9] transition-colors"
+                >
+                  HUD 3
+                </button>
+              </div>
+
+              <!-- ===============================================================
+                   TAB 1 DIAGRAMMATIC VISUAL HUD 1 (PILL 1: 00:02 Crotch-to-eyes pan)
+                   Vertical upward tracking arrow + rounded framing bracket
+                   =============================================================== -->
+              <div
+                id="gaze-hud-1"
+                aria-hidden="true"
+                class="hud-layer hud-hidden pointer-events-none absolute inset-0 z-10 w-full h-full p-5 sm:p-7 flex items-center justify-between"
+              >
+                <!-- Left Frame: Vertical Upward Tracking Arrow Rail -->
+                <div class="h-[68%] mt-6 flex items-center gap-3">
+                  <div class="h-full flex flex-col items-center justify-between py-1">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="text-[#C8B89D] pan-chevron">
+                      <path d="M10 16V4M10 4L5 9M10 4L15 9" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <div class="w-[1.5px] flex-1 my-1.5 bg-gradient-to-t from-[#C8B89D]/20 via-[#C8B89D]/85 to-[#C8B89D] rounded-full"></div>
+                    <span class="w-2.5 h-2.5 rounded-full border border-[#C8B89D] bg-[#0E0F11]"></span>
+                  </div>
+
+                  <div class="glass-overlay rounded-xl px-3.5 py-2 flex items-center gap-2">
+                    <span class="meta-mono text-[13px] text-[#C8B89D]">↑</span>
+                    <span class="meta-mono text-[12.5px] text-[#F2EFE9] whitespace-nowrap">
+                      Upward camera pan
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Center-Right: Rounded Framing Bracket Tagged “Offer gaze · Subject looks away” -->
+                <div class="w-[46%] max-w-[340px] h-[64%] relative rounded-2xl border border-[#C8B89D]/45 flex flex-col justify-between p-3.5">
+                  <div class="flex justify-between">
+                    <span class="w-4 h-4 rounded-tl-lg border-t-2 border-l-2 border-[#C8B89D]"></span>
+                    <span class="w-4 h-4 rounded-tr-lg border-t-2 border-r-2 border-[#C8B89D]"></span>
+                  </div>
+
+                  <div class="self-start glass-overlay rounded-xl px-3.5 py-2">
+                    <span class="meta-mono text-[12.5px] text-[#F2EFE9]">
+                      Offer gaze · Subject looks away
+                    </span>
+                  </div>
+
+                  <div class="flex justify-between">
+                    <span class="w-4 h-4 rounded-bl-lg border-b-2 border-l-2 border-[#C8B89D]"></span>
+                    <span class="w-4 h-4 rounded-br-lg border-b-2 border-r-2 border-[#C8B89D]"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===============================================================
+                   TAB 1 DIAGRAMMATIC VISUAL HUD 2 (PILL 2: 00:06 Breathy vocal fry)
+                   Translucent bottom-left acoustic proximity meter with 12 bars
+                   =============================================================== -->
+              <div
+                id="gaze-hud-2"
+                aria-hidden="true"
+                class="hud-layer hud-hidden pointer-events-none absolute inset-0 z-10 w-full h-full p-5 sm:p-7 flex items-end justify-start"
+              >
+                <div id="acoustic-meter-card" class="glass-overlay rounded-2xl px-4 py-3.5 flex items-center gap-4">
+                  <!-- 12 Animated Equalizer Bars -->
+                  <div class="h-8 flex items-end gap-[3.5px] px-1">
+                    <span class="eq-bar h-3" style="animation-delay: 0ms;"></span>
+                    <span class="eq-bar h-5" style="animation-delay: 110ms;"></span>
+                    <span class="eq-bar h-7" style="animation-delay: 220ms;"></span>
+                    <span class="eq-bar h-4" style="animation-delay: 70ms;"></span>
+                    <span class="eq-bar h-8" style="animation-delay: 310ms;"></span>
+                    <span class="eq-bar h-6" style="animation-delay: 160ms;"></span>
+                    <span class="eq-bar h-7" style="animation-delay: 40ms;"></span>
+                    <span class="eq-bar h-5" style="animation-delay: 260ms;"></span>
+                    <span class="eq-bar h-8" style="animation-delay: 140ms;"></span>
+                    <span class="eq-bar h-4" style="animation-delay: 290ms;"></span>
+                    <span class="eq-bar h-6" style="animation-delay: 90ms;"></span>
+                    <span class="eq-bar h-3" style="animation-delay: 200ms;"></span>
+                  </div>
+
+                  <div class="h-7 w-[1px] bg-[#F2EFE9]/15"></div>
+
+                  <span class="meta-mono text-[12.5px] text-[#F2EFE9]">
+                    Acoustic proximity · Breathy cadence &amp; vocal fry
+                  </span>
+                </div>
+              </div>
+
+              <!-- ===============================================================
+                   TAB 1 DIAGRAMMATIC VISUAL HUD 3 (PILL 3: 00:09 Direct eye contact)
+                   Eye-line reticle + top-right unmarked whiteness tag
+                   =============================================================== -->
+              <div
+                id="gaze-hud-3"
+                aria-hidden="true"
+                class="hud-layer hud-hidden pointer-events-none absolute inset-0 z-10 w-full h-full p-5 sm:p-7 flex flex-col justify-between"
+              >
+                <!-- Top-Right Corner Tag -->
+                <div class="self-end glass-overlay rounded-xl px-3.5 py-2">
+                  <span class="meta-mono text-[12.5px] text-[#F2EFE9]">
+                    Minimal styling · Unmarked whiteness
+                  </span>
+                </div>
+
+                <!-- Upper-Center Eye-Line Reticle -->
+                <div class="my-auto self-center flex flex-col items-center gap-3 -translate-y-4">
+                  <div class="w-56 sm:w-64 h-16 rounded-2xl border border-[#C8B89D]/65 bg-[#0E0F11]/20 relative flex items-center justify-center">
+                    <span class="absolute top-1.5 left-1.5 w-3.5 h-3.5 rounded-tl-md border-t-2 border-l-2 border-[#C8B89D]"></span>
+                    <span class="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-tr-md border-t-2 border-r-2 border-[#C8B89D]"></span>
+                    <span class="absolute bottom-1.5 left-1.5 w-3.5 h-3.5 rounded-bl-md border-b-2 border-l-2 border-[#C8B89D]"></span>
+                    <span class="absolute bottom-1.5 right-1.5 w-3.5 h-3.5 rounded-br-md border-b-2 border-r-2 border-[#C8B89D]"></span>
+
+                    <div class="w-full h-[1px] bg-[#C8B89D]/35"></div>
+                    <div class="absolute w-7 h-7 rounded-full border border-[#C8B89D] flex items-center justify-center">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#C8B89D]"></span>
+                    </div>
+                  </div>
+
+                  <div class="glass-overlay rounded-xl px-3.5 py-2">
+                    <span class="meta-mono text-[12.5px] text-[#F2EFE9]">
+                      Demand gaze · Direct lens contact
+                    </span>
+                  </div>
+                </div>
+
+                <div class="h-2"></div>
+              </div>
+
+              <!-- ===============================================================
+                   TAB 2 GRAMMAR OVERLAY (HALLIDAY TRANSITIVITY + COOK ADJECTIVAL FUSION)
+                   =============================================================== -->
+              <div
+                id="grammar-overlay-layer"
+                class="hud-layer hud-hidden pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5"
+              >
+                <div class="glass-overlay pointer-events-auto w-full rounded-2xl p-5 space-y-3.5">
+                  
+                  <!-- Header & Spoken Commercial Line (Title in Antonio 700; Quote in IBM Plex Sans) -->
+                  <div class="border-b border-white/10 pb-3 space-y-1.5">
+                    <div class="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 class="title-antonio text-[21px] text-[#C8B89D]">
+                        Grammar overlay
+                      </h3>
+                      <span class="meta-mono text-[12px] text-[#C8B89D]">
+                        Halliday, 1994 · Cook, 2001
+                      </span>
+                    </div>
+                    <p class="font-sans text-[16.5px] text-[#F2EFE9] leading-snug">
+                      “Genes are passed down from parents to offspring, often determining traits like hair color, personality, and even eye color. My jeans are blue.”
+                    </p>
+                  </div>
+
+                  <!-- Three Syntactic Blocks: ACTOR / MATERIAL PROCESS / GOAL -->
+                  <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-stretch">
+                    
+                    <!-- ACTOR -->
+                    <div class="md:col-span-3 rounded-xl border border-[#C8B89D]/60 bg-[#0E0F11]/75 px-4 py-3 flex flex-col justify-between">
+                      <span class="meta-mono text-[11px] tracking-wider text-[#C8B89D] mb-1">
+                        ACTOR
+                      </span>
+                      <span class="font-sans font-semibold text-[17px] text-[#F2EFE9]">
+                        “Genes”
+                      </span>
+                    </div>
+
+                    <!-- MATERIAL PROCESS -->
+                    <div class="md:col-span-4 rounded-xl border border-[#C8B89D]/60 bg-[#0E0F11]/75 px-4 py-3 flex flex-col justify-between">
+                      <span class="meta-mono text-[11px] tracking-wider text-[#C8B89D] mb-1">
+                        MATERIAL PROCESS
+                      </span>
+                      <span class="font-sans font-semibold text-[17px] text-[#F2EFE9]">
+                        “determining”
+                      </span>
+                    </div>
+
+                    <!-- GOAL -->
+                    <div class="md:col-span-5 rounded-xl border border-[#C8B89D]/60 bg-[#0E0F11]/75 px-4 py-3 flex flex-col justify-between">
+                      <span class="meta-mono text-[11px] tracking-wider text-[#C8B89D] mb-1">
+                        GOAL
+                      </span>
+                      <span class="font-sans font-semibold text-[16px] text-[#F2EFE9] leading-snug">
+                        “traits like hair color, personality, and even eye color”
+                      </span>
+                    </div>
+
+                  </div>
+
+                  <!-- DELETED AGENTS + ADJECTIVAL FUSION Rows -->
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+                    <div class="rounded-xl border border-white/10 bg-[#0E0F11]/65 px-4 py-2.5 flex flex-col justify-center gap-0.5">
+                      <span class="meta-mono text-[11px] tracking-wider text-[#9A9893]">
+                        DELETED AGENTS
+                      </span>
+                      <span class="font-sans text-[14.5px] text-[#F2EFE9]">
+                        Casting directors, stylists, lighting technicians, editors
+                      </span>
+                    </div>
+
+                    <div class="rounded-xl border border-white/10 bg-[#0E0F11]/65 px-4 py-2.5 flex flex-col justify-center gap-0.5">
+                      <span class="meta-mono text-[11px] tracking-wider text-[#C8B89D]">
+                        ADJECTIVAL FUSION · COOK, 2001
+                      </span>
+                      <span class="font-sans text-[14.5px] text-[#F2EFE9]">
+                        “blue” links “eye color” in clause one to “My jeans are blue.” in clause two, fusing Nordic eye pigment with wearable denim.
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               BOTTOM PLAYBACK CONTROLS + CONTEXTUAL TIMESTAMPED CUE PILLS
+               =================================================================== -->
+          <div class="w-full bg-[#15171A] border-t border-[#282B30] px-4 py-2.5 flex flex-col gap-2.5 shrink-0 z-20">
+            
+            <!-- Row 1: Transport Controls + Scrubber Bar with Clickable Marker Ticks -->
+            <div class="w-full flex items-center gap-3 sm:gap-4">
+              
+              <!-- Play / Pause -->
+              <button
+                type="button"
+                id="btn-play-pause"
+                class="font-sans font-medium h-8 px-3.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#F2EFE9] text-[13px] transition-colors shrink-0"
+              >
+                Play
+              </button>
+
+              <!-- Mute / Unmute -->
+              <button
+                type="button"
+                id="btn-mute-toggle"
+                class="font-sans font-medium h-8 px-3 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#F2EFE9] text-[13px] transition-colors shrink-0"
+              >
+                Unmute
+              </button>
+
+              <!-- Interactive Range Scrubber + Positioned Marker Ticks -->
+              <div class="flex-1 relative flex items-center h-6">
+                <input
+                  type="range"
+                  id="video-scrubber"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value="0"
+                  aria-label="Video timeline scrubber"
+                  class="video-scrubber relative z-10"
+                />
+                <!-- Clickable Marker Ticks Layer -->
+                <div id="scrubber-markers" class="absolute inset-x-[7px] top-1/2 -translate-y-1/2 h-4 pointer-events-none z-20"></div>
+              </div>
+
+              <!-- Tabular Timestamp Readout -->
+              <span id="video-timecode" class="meta-mono text-[13px] text-[#9A9893] shrink-0">
+                00:00 / 00:15
+              </span>
+
+              <!-- Replace Clip -->
+              <button
+                type="button"
+                id="btn-replace-video"
+                class="font-sans font-medium h-8 px-3 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#9A9893] hover:text-[#F2EFE9] text-[13px] transition-colors shrink-0"
+              >
+                Replace clip
+              </button>
+            </div>
+
+            <!-- Row 2: Timestamped Analytical Cue Pills (Pills 1–3 on Voyeurism; Pill 4 on Hierarchy) -->
+            <div class="w-full flex items-center gap-2 overflow-x-auto pb-0.5" role="group" aria-label="Timestamped analytical cues">
+              <span class="meta-mono text-[11px] text-[#9A9893] shrink-0 pr-1">
+                Cues
+              </span>
+
+              <!-- Pill 1 (Voyeurism -> 00:02 -> HUD 1) -->
+              <button
+                type="button"
+                data-cue-index="0"
+                data-cue-tab="0"
+                class="cue-pill rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] px-3 py-1.5 flex items-center gap-2 text-left transition-colors duration-200 shrink-0"
+              >
+                <span class="meta-mono text-[12px] text-[#C8B89D]">00:02</span>
+                <span class="font-sans text-[13.5px] text-[#F2EFE9]">Crotch-to-eyes pan</span>
+              </button>
+
+              <!-- Pill 2 (Voyeurism -> 00:06 -> HUD 2) -->
+              <button
+                type="button"
+                data-cue-index="1"
+                data-cue-tab="0"
+                class="cue-pill rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] px-3 py-1.5 flex items-center gap-2 text-left transition-colors duration-200 shrink-0"
+              >
+                <span class="meta-mono text-[12px] text-[#C8B89D]">00:06</span>
+                <span class="font-sans text-[13.5px] text-[#F2EFE9]">Breathy vocal fry</span>
+              </button>
+
+              <!-- Pill 3 (Voyeurism -> 00:09 -> HUD 3) -->
+              <button
+                type="button"
+                data-cue-index="2"
+                data-cue-tab="0"
+                class="cue-pill rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] px-3 py-1.5 flex items-center gap-2 text-left transition-colors duration-200 shrink-0"
+              >
+                <span class="meta-mono text-[12px] text-[#C8B89D]">00:09</span>
+                <span class="font-sans text-[13.5px] text-[#F2EFE9]">Direct eye contact</span>
+              </button>
+
+              <!-- Pill 4 (Hierarchy -> 00:11 -> Grammar overlay) -->
+              <button
+                type="button"
+                data-cue-index="3"
+                data-cue-tab="1"
+                class="cue-pill hidden rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] px-3 py-1.5 flex items-center gap-2 text-left transition-colors duration-200 shrink-0"
+              >
+                <span class="meta-mono text-[12px] text-[#C8B89D]">00:11</span>
+                <span class="font-sans text-[13.5px] text-[#F2EFE9]">“Genes are passed down...”</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           STAGE B: TAB 3 — “POST-FEMINIST ALIBIS”
+           Top row: Side-by-side 16:9 silent loops + Synchronized Dual Scrubber
+           Bottom row: Three 3D Click-to-Flip “Alibi vs. Rebuttal” cards
+           ===================================================================== -->
+      <div
+        id="platform-stage-pane"
+        class="stage-pane stage-hidden lg:absolute lg:inset-0 w-full h-full lg:overflow-y-auto pr-0.5"
+      >
+        <div class="max-w-7xl mx-auto w-full min-h-full flex flex-col gap-4 pb-2">
+
+          <!-- TOP ROW: TWO SIDE-BY-SIDE 16:9 SILENT LOOPS + DUAL SCRUBBER -->
+          <div class="rounded-2xl border border-[#282B30] bg-[#15171A] overflow-hidden shrink-0">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-[#282B30]">
+              
+              <!-- Left Video: 1980 Brooke Shields · Calvin Klein -->
+              <div class="flex flex-col">
+                <div class="px-5 py-2.5 border-b border-[#282B30] flex items-baseline justify-between gap-3">
+                  <div class="flex items-baseline gap-3 min-w-0">
+                    <h2 class="title-antonio text-[22px] text-[#F2EFE9] truncate">
+                      1980 Brooke Shields
+                    </h2>
+                    <span class="meta-mono text-[13px] text-[#9A9893] shrink-0">
+                      Calvin Klein
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      id="bs-replace-btn"
+                      class="hidden font-sans font-medium h-7 px-2.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[12px] text-[#9A9893] hover:text-[#F2EFE9] transition-colors"
+                    >
+                      Replace
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 16:9 Silent Loop Container -->
+                <div
+                  id="bs-dropzone"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Drop silent 1980 Brooke Shields clip or click to browse"
+                  class="w-full aspect-video max-h-[225px] p-3 flex items-center justify-center relative overflow-hidden cursor-pointer bg-[#0E0F11]"
+                >
+                  <video
+                    id="shields-video"
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    class="hidden w-full h-full rounded-xl object-contain bg-[#0E0F11]"
+                  ></video>
+                  <div
+                    id="bs-placeholder"
+                    class="w-full h-full rounded-xl border border-dashed border-[#282B30] bg-[#15171A]/70 hover:border-[#C8B89D] flex flex-col items-center justify-center p-4 text-center transition-colors duration-200"
+                  >
+                    <p class="font-sans font-medium text-[15px] text-[#F2EFE9] mb-1">
+                      Drop silent 1980 Brooke Shields clip (.mp4) or click to select
+                    </p>
+                    <p id="bs-autoload-status" class="meta-mono text-[12px] text-[#9A9893]">
+                      Checking folder for brooke.mp4…
+                    </p>
+                  </div>
+
+                  <!-- Synchronized Visual Playhead Marker Bar inside container -->
+                  <div class="pointer-events-none absolute inset-x-4 bottom-3 h-1 rounded-full bg-[#282B30]/80 overflow-hidden">
+                    <div id="bs-playhead-bar" class="h-full w-0 bg-[#C8B89D] transition-[width] duration-75"></div>
+                  </div>
+
+                  <input id="bs-file-input" type="file" accept="video/*" class="hidden" />
+                </div>
+              </div>
+
+              <!-- Right Video: 2025 Sydney Sweeney · American Eagle -->
+              <div class="flex flex-col">
+                <div class="px-5 py-2.5 border-b border-[#282B30] flex items-baseline justify-between gap-3">
+                  <div class="flex items-baseline gap-3 min-w-0">
+                    <h2 class="title-antonio text-[22px] text-[#F2EFE9] truncate">
+                      2025 Sydney Sweeney
+                    </h2>
+                    <span class="meta-mono text-[13px] text-[#9A9893] shrink-0">
+                      American Eagle
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      id="ss-replace-btn"
+                      class="hidden font-sans font-medium h-7 px-2.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[12px] text-[#9A9893] hover:text-[#F2EFE9] transition-colors"
+                    >
+                      Replace
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 16:9 Silent Loop Container -->
+                <div
+                  id="ss-dropzone"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Drop silent 2025 Sydney Sweeney clip or click to browse"
+                  class="w-full aspect-video max-h-[225px] p-3 flex items-center justify-center relative overflow-hidden cursor-pointer bg-[#0E0F11]"
+                >
+                  <video
+                    id="sweeney-silent-video"
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    class="hidden w-full h-full rounded-xl object-contain bg-[#0E0F11]"
+                  ></video>
+                  <div
+                    id="ss-placeholder"
+                    class="w-full h-full rounded-xl border border-dashed border-[#282B30] bg-[#15171A]/70 hover:border-[#C8B89D] flex flex-col items-center justify-center p-4 text-center transition-colors duration-200"
+                  >
+                    <p class="font-sans font-medium text-[15px] text-[#F2EFE9] mb-1">
+                      Drop silent 2025 Sydney Sweeney clip (.mp4) or click to select
+                    </p>
+                    <p id="ss-autoload-status" class="meta-mono text-[12px] text-[#9A9893]">
+                      Checking folder for sydney.mp4…
+                    </p>
+                  </div>
+
+                  <!-- Synchronized Visual Playhead Marker Bar inside container -->
+                  <div class="pointer-events-none absolute inset-x-4 bottom-3 h-1 rounded-full bg-[#282B30]/80 overflow-hidden">
+                    <div id="ss-playhead-bar" class="h-full w-0 bg-[#C8B89D] transition-[width] duration-75"></div>
+                  </div>
+
+                  <input id="ss-file-input" type="file" accept="video/*" class="hidden" />
+                </div>
+              </div>
+
+            </div>
+
+            <!-- SYNCHRONIZED DUAL-TIMELINE SCRUBBER BAR -->
+            <div class="w-full bg-[#15171A] border-t border-[#282B30] px-4 py-2.5 flex flex-wrap sm:flex-nowrap items-center gap-3">
+              
+              <button
+                type="button"
+                id="btn-dual-play-pause"
+                class="font-sans font-medium h-8 px-3.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#F2EFE9] text-[13px] transition-colors shrink-0"
+              >
+                Pause both
+              </button>
+
+              <div class="flex-1 min-w-[160px] flex items-center">
+                <input
+                  type="range"
+                  id="dual-scrubber"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value="0"
+                  aria-label="Synchronized dual video timeline scrubber"
+                  class="video-scrubber"
+                />
+              </div>
+
+              <span id="dual-progress-readout" class="meta-mono text-[12px] text-[#C8B89D] shrink-0">
+                Sync 000%
+              </span>
+
+              <!-- Quick Framing Comparison Pills -->
+              <div class="flex items-center gap-1.5 overflow-x-auto shrink-0">
+                <button
+                  type="button"
+                  data-dual-pct="15"
+                  class="dual-cue-pill font-sans text-[12px] h-7 px-2.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#9A9893] hover:text-[#F2EFE9] transition-colors whitespace-nowrap"
+                >
+                  15% Framing distance
+                </button>
+                <button
+                  type="button"
+                  data-dual-pct="55"
+                  class="dual-cue-pill font-sans text-[12px] h-7 px-2.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#9A9893] hover:text-[#F2EFE9] transition-colors whitespace-nowrap"
+                >
+                  55% Body vs. proximity
+                </button>
+                <button
+                  type="button"
+                  data-dual-pct="85"
+                  class="dual-cue-pill font-sans text-[12px] h-7 px-2.5 rounded-lg border border-[#282B30] bg-[#0E0F11] hover:border-[#C8B89D] text-[#9A9893] hover:text-[#F2EFE9] transition-colors whitespace-nowrap"
+                >
+                  85% Closing pose
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ===================================================================
+               BOTTOM ROW: THREE EQUAL-HEIGHT 3D CLICK-TO-FLIP ALIBI CARDS
+               =================================================================== -->
+          <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+
+            <!-- CARD 1: ALIBI 01 <-> THEORETICAL REBUTTAL -->
+            <div
+              class="flip-card-scene"
+              role="button"
+              tabindex="0"
+              aria-pressed="false"
+              aria-label="Alibi 01 card. Press Enter or click to flip for theoretical rebuttal."
+            >
+              <div class="flip-card-inner">
+                
+                <!-- Card 1 Front -->
+                <article class="flip-card-face rounded-2xl border border-[#282B30] hover:border-[#C8B89D]/70 bg-[#15171A] p-5 flex flex-col justify-between transition-colors duration-200">
+                  <div>
+                    <h3 class="title-antonio text-[25px] text-[#C8B89D] mb-1">
+                      Alibi 01
+                    </h3>
+                    <h4 class="title-antonio text-[18px] text-[#9A9893] mb-3">
+                      Sexual subjectification
+                    </h4>
+                    <p class="font-sans text-[16.5px] leading-[1.6] text-[#F2EFE9]">
+                      American Eagle frames Sweeney as an active, self-directing agent rather than a passive object. Spatial intimacy and direct eye contact imply personal control, casting feminist critique as intrusive policing.
+                    </p>
+                  </div>
+                  <div class="pt-4 mt-4 border-t border-[#282B30] flex items-center justify-between text-[#9A9893]">
+                    <span class="meta-mono text-[11.5px]">Click to flip · Rebuttal</span>
+                    <span class="meta-mono text-[12px] text-[#C8B89D]">↻</span>
+                  </div>
+                </article>
+
+                <!-- Card 1 Back -->
+                <article class="flip-card-face flip-card-back rounded-2xl border border-[#C8B89D] bg-[#15171A] p-5 flex flex-col justify-between">
+                  <div>
+                    <h3 class="title-antonio text-[25px] text-[#F2EFE9] mb-1">
+                      Theoretical rebuttal
+                    </h3>
+                    <p class="meta-mono text-[12px] text-[#C8B89D] mb-3">
+                      Gill (2007, 2008); McRobbie (2004); McNay (1992); Goldman (1992)
+                    </p>
+                    <p class="font-sans text-[16px] leading-[1.6] text-[#F2EFE9]">
+                      Gill identifies this figure as the “midriff”, where voluntary display is packaged as empowerment. McRobbie terms this “feminism taken into account”, while Goldman exposes it as “commodity feminism” selling self-fetishisation with a “knowing wink”.
+                    </p>
+                  </div>
+                  <div class="pt-4 mt-4 border-t border-[#282B30] flex items-center justify-between text-[#9A9893]">
+                    <span class="meta-mono text-[11.5px]">Click to flip · Alibi 01</span>
+                    <span class="meta-mono text-[12px] text-[#C8B89D]">↺</span>
+                  </div>
+                </article>
+
+              </div>
+            </div>
+
+            <!-- CARD 2: ALIBI 02 <-> THEORETICAL REBUTTAL -->
+            <div
+              class="flip-card-scene"
+              role="button"
+              tabindex="0"
+              aria-pressed="false"
+              aria-label="Alibi 02 card. Press Enter or click to flip for theoretical rebuttal."
+            >
+              <div class="flip-card-inner">
+                
+                <!-- Card 2 Front -->
+                <article class="flip-card-face rounded-2xl border border-[#282B30] hover:border-[#C8B89D]/70 bg-[#15171A] p-5 flex flex-col justify-between transition-colors duration-200">
+                  <div>
+                    <h3 class="title-antonio text-[25px] text-[#C8B89D] mb-1">
+                      Alibi 02
+                    </h3>
+                    <h4 class="title-antonio text-[18px] text-[#9A9893] mb-3">
+                      Moral currency
+                    </h4>
+                    <p class="font-sans text-[16.5px] leading-[1.6] text-[#F2EFE9]">
+                      Perceived <span class="text-[#7BAE8B] font-semibold">Gender progression</span> is traded to offset <span class="text-[#C9736B] font-semibold">racial regression</span>. Celebrating Sweeney’s female autonomy creates a moral buffer that insulates the campaign’s Nordic genetic hierarchy from scrutiny.
+                    </p>
+                  </div>
+                  <div class="pt-4 mt-4 border-t border-[#282B30] flex items-center justify-between text-[#9A9893]">
+                    <span class="meta-mono text-[11.5px]">Click to flip · Rebuttal</span>
+                    <span class="meta-mono text-[12px] text-[#C8B89D]">↻</span>
+                  </div>
+                </article>
+
+                <!-- Card 2 Back -->
+                <article class="flip-card-face flip-card-back rounded-2xl border border-[#C8B89D] bg-[#15171A] p-5 flex flex-col justify-between">
+                  <div>
+                    <h3 class="title-antonio text-[25px] text-[#F2EFE9] mb-1">
+                      Theoretical rebuttal
+                    </h3>
+                    <p class="meta-mono text-[12px] text-[#C8B89D] mb-3">
+                      Lazar (2006); Gill (2008)
+                    </p>
+                    <p class="font-sans text-[16px] leading-[1.6] text-[#F2EFE9]">
+                      Lazar shows how “power femininity” treats white Western women as the universal standard of empowerment. Gill demonstrates that the knowing “midriff” is overwhelmingly coded as white, implying whiteness itself enables liberation.
+                    </p>
+                  </div>
+                  <div class="pt-4 mt-4 border-t border-[#282B30] flex items-center justify-between text-[#9A9893]">
+                    <span class="meta-mono text-[11.5px]">Click to flip · Alibi 02</span>
+                    <span class="meta-mono text-[12px] text-[#C8B89D]">↺</span>
+                  </div>
+                </article>
+
+              </div>
+            </div>
+
+            <!-- CARD 3: ALIBI 03 <-> THEORETICAL REBUTTAL -->
+            <div
+              class="flip-card-scene"
+              role="button"
+              tabindex="0"
+              aria-pressed="false"
+              aria-label="Alibi 03 card. Press Enter or click to flip for theoretical rebuttal."
+            >
+              <div class="flip-card-inner">
+                
+                <!-- Card 3 Front -->
+                <article class="flip-card-face rounded-2xl border border-[#282B30] hover:border-[#C8B89D]/70 bg-[#15171A] p-5 flex flex-col justify-between transition-colors duration-200">
+                  <div>
+                    <h3 class="title-antonio text-[25px] text-[#C8B89D] mb-1">
+                      Alibi 03
+                    </h3>
+                    <h4 class="title-antonio text-[18px] text-[#9A9893] mb-2.5">
+                      Institutional insulation
+                    </h4>
+
+                    <div class="space-y-2.5">
+                      <div class="rounded-xl border border-[#282B30] bg-[#0E0F11] p-3">
+                        <span class="meta-mono text-[12px] text-[#C8B89D] block mb-0.5">
+                          Instagram
+                        </span>
+                        <p class="font-sans text-[15px] leading-[1.55] text-[#F2EFE9]">
+                          “Her jeans. Her story... Great jeans look good on everyone.”
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-[#282B30] bg-[#0E0F11] p-3">
+                        <span class="meta-mono text-[12px] text-[#C8B89D] block mb-0.5">
+                          Podcast
+                        </span>
+                        <p class="font-sans text-[15px] leading-[1.55] text-[#F2EFE9]">
+                          JD Vance dismisses critics as “woke” bullies attacking a “normal” all-American woman.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pt-4 mt-4 border-t border-[#282B30] flex items-center justify-between text-[#9A9893]">
+                    <span class="meta-mono text-[11.5px]">Click to flip · Rebuttal</span>
+                    <span class="meta-mono text-[12px] text-[#C8B89D]">↻</span>
+                  </div>
+                </article>
+
+                <!-- Card 3 Back -->
+                <article class="flip-card-face flip-card-back rounded-2xl border border-[#C8B89D] bg-[#15171A] p-5 flex flex-col justify-between">
+                  <div>
+                    <h3 class="title-antonio text-[25px] text-[#F2EFE9] mb-1">
+                      Theoretical rebuttal
+                    </h3>
+                    <p class="meta-mono text-[12px] text-[#C8B89D] mb-3">
+                      Delin (2000); Bonilla-Silva (2003); Ahmed (2006); van Dijk (1992)
+                    </p>
+                    <p class="font-sans text-[15.5px] leading-[1.6] text-[#F2EFE9]">
+                      Instagram deploys Delin’s disjunctive syntax and Ahmed’s non-performativity to evade accountability through colourblind slogans. On podcasts, van Dijk’s reversal strategy reframes anti-racist critique as elitist aggression.
+                    </p>
+                  </div>
+                  <div class="pt-4 mt-4 border-t border-[#282B30] flex items-center justify-between text-[#9A9893]">
+                    <span class="meta-mono text-[11.5px]">Click to flip · Alibi 03</span>
+                    <span class="meta-mono text-[12px] text-[#C8B89D]">↺</span>
+                  </div>
+                </article>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         COLLAPSIBLE RIGHT-HAND ANALYSIS DRAWER (440px WHEN OPEN)
+         ======================================================================= -->
+    <aside
+      id="analysis-drawer"
+      aria-label="Critical discourse analysis drawer"
+      class="bg-[#15171A] h-full shrink-0 border border-[#282B30] rounded-2xl"
+    >
+      <div class="w-[440px] max-w-[calc(100vw-32px)] h-full flex flex-col justify-between p-6 overflow-y-auto">
+        
+        <!-- ===================================================================
+             DRAWER TAB 1: VOYEURISM
+             =================================================================== -->
+        <div id="drawer-pane-0" class="drawer-pane drawer-fade">
+          <h2 class="title-antonio text-[34px] text-[#F2EFE9] mb-5">
+            Voyeurism
+          </h2>
+
+          <div class="space-y-4">
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                Technique 01
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Visual gaze and camera movement
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                Slow upward tracking from crotch to direct eye contact shifts Kress &amp; van Leeuwen’s (2006) “offer” gaze into a “demand” gaze, operationalising Laura Mulvey’s (1975) “to-be-looked-at-ness”, Christian Metz’s (1982) “unauthorised keyhole scopophilia”, and Guy Cook’s (2001) erotic mood as dressing turns into consumable undressing.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Kress &amp; van Leeuwen, 2006; Mulvey, 1975; Metz, 1982; Cook, 2001
+              </p>
+            </article>
+
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                Technique 02
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Sound and simulated proximity
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                Slow cadence, breathy inhalation, raspy vocal fry, and soft sighs compensate for physical absence, simulating intimate proximity and coding femininity as submissive to patriarchal fantasy.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Metz, 1982
+              </p>
+            </article>
+
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                Technique 03
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Racial symbol and exnomination
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                Minimal lighting, natural makeup, and classic blue denim frame simplicity as purity, asserting whiteness as the neutral, unmarked default standard via exnomination.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Exnomination · Default whiteness
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             DRAWER TAB 2: SOMATIC HIERARCHY
+             =================================================================== -->
+        <div id="drawer-pane-1" class="drawer-pane hidden">
+          <h2 class="title-antonio text-[34px] text-[#F2EFE9] mb-5">
+            Somatic hierarchy
+          </h2>
+
+          <div class="space-y-4">
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                01 Grammatical causation
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Hallidayan transitivity and erased agency
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                In “Genes are passed down from parents to offspring, often determining traits like hair color, personality, and even eye color”, Halliday’s (1994) transitivity maps Actor (“Genes”) → Material process (“determining”) → Goal (“traits”), erasing casting directors, stylists, lighting technicians, and editors so Eurocentric beauty reads as an automatic law of nature.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Halliday, 1994
+              </p>
+            </article>
+
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                02 Adjectival fusion and reification
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Nordic traits as commodity sign
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                Cook’s (2001) adjectival fusion links “eye color” to “My jeans are blue.”, while Goldman’s (1992) reification packages blonde hair, blue eyes, a slim waist, and a large bust as an aspirational commodity sign—pressuring women outside that template to internalise structural racial exclusion as personal biological failure.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Cook, 2001; Goldman, 1992
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             DRAWER TAB 3: POST-FEMINIST ALIBIS
+             =================================================================== -->
+        <div id="drawer-pane-2" class="drawer-pane hidden">
+          <h2 class="title-antonio text-[34px] text-[#F2EFE9] mb-5">
+            Post-feminist alibis
+          </h2>
+
+          <div class="space-y-4">
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                Alibi 01
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Sexual subjectification
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                Unlike Brooke Shields’ full-body stage distance, Sweeney’s spatial proximity and direct eye contact frame her as an active, self-directing agent—packaging voluntary self-fetishisation as autonomous “midriff” agency (“feminism taken into account”, “reprivatisation”, “commodity feminism”) while casting critics as the “feminist thought police”.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Gill, 2007, 2008; McRobbie, 2004; McNay, 1992; Goldman, 1992
+              </p>
+            </article>
+
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                Alibi 02
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Moral currency
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                Perceived gender progression is traded to offset racial regression: white “power femininity” erases racial difference and reserves “knowing” post-feminist sexual agency exclusively for white women, creating a moral buffer that insulates Nordic genetic hierarchy from scrutiny.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Lazar, 2006; Gill, 2008
+              </p>
+            </article>
+
+            <article class="p-5 rounded-xl border border-[#282B30] bg-[#0E0F11]">
+              <h3 class="title-antonio text-[21px] text-[#C8B89D] mb-1">
+                Alibi 03
+              </h3>
+              <h4 class="title-antonio text-[18px] text-[#F2EFE9] mb-2.5">
+                Institutional insulation
+              </h4>
+              <p class="font-sans text-[18px] leading-[1.6] text-[#9A9893] mb-3">
+                On Instagram, disjunctive fragments (“Her jeans. Her story.”) and “Great jeans look good on everyone.” deploy colourblind non-performativity as a PR shield; on podcasts, “double entanglement” and Strategy 4 reversal reframe anti-racist critics as “woke” bullies attacking a “normal” all-American woman.
+              </p>
+              <p class="meta-mono text-[12px] text-[#C8B89D]">
+                Delin, 2000; Bonilla-Silva, 2003; Ahmed, 2006; McRobbie, 2004; van Dijk, 1992
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Minimal Keyboard Shortcut Footer -->
+        <div class="meta-mono mt-6 pt-4 border-t border-[#282B30] flex items-center justify-between text-[12px] text-[#9A9893]">
+          <span>1–3 · tabs</span>
+          <span>M · mute</span>
+          <span>O · overlay</span>
+          <span>A · analysis</span>
+        </div>
+
+      </div>
+    </aside>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      'use strict';
+
+      /* =======================================================================
+         1. TIMESTAMPED CUE DEFINITIONS (4 TARGETED ANALYTICAL BEATS)
+         ======================================================================= */
+      const CUE_BEATS = [
+        {
+          time: 2.0,
+          tab: 0,
+          gazeHud: 1,
+          label: '00:02 Crotch-to-eyes pan',
+        },
+        {
+          time: 6.0,
+          tab: 0,
+          gazeHud: 2,
+          label: '00:06 Breathy vocal fry',
+        },
+        {
+          time: 9.0,
+          tab: 0,
+          gazeHud: 3,
+          label: '00:09 Direct eye contact',
+        },
+        {
+          time: 11.0,
+          tab: 1,
+          gazeHud: 0,
+          label: '00:11 “Genes are passed down...”',
+        },
+      ];
+
+      /* =======================================================================
+         2. APPLICATION STATE
+         ======================================================================= */
+      let activeTabIndex = 0;
+      let isDrawerOpen = false;
+      let activeGazeHud = 0; // 0 = hidden, 1 = HUD 1, 2 = HUD 2, 3 = HUD 3
+      let isGrammarOverlayActive = false;
+
+      let isPrimaryVideoLoaded = false;
+      let primaryVideoObjectUrl = null;
+      let userExplicitlyMutedPrimary = false;
+      let isScrubbing = false;
+
+      let shieldsObjectUrl = null;
+      let sweeneySilentObjectUrl = null;
+      let isDualPlaying = true;
+      let isDualScrubbing = false;
+      let dualSyncRafId = null;
+
+      /* =======================================================================
+         3. DOM REFERENCES
+         ======================================================================= */
+      const primaryNav = document.getElementById('primary-nav');
+      const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+      const tabIndicator = document.getElementById('tab-indicator');
+
+      const btnOverlayToggle = document.getElementById('btn-overlay-toggle');
+      const drawerEl = document.getElementById('analysis-drawer');
+      const drawerToggleBtn = document.getElementById('drawer-toggle-btn');
+      const drawerToggleLabel = document.getElementById('drawer-toggle-label');
+      const drawerStatusDot = document.getElementById('drawer-status-dot');
+      const drawerPanes = Array.from(document.querySelectorAll('.drawer-pane'));
+
+      const videoStagePane = document.getElementById('video-stage-pane');
+      const platformStagePane = document.getElementById('platform-stage-pane');
+
+      // Primary Video Stage Elements (Tabs 1 & 2)
+      const primaryVideo = document.getElementById('primary-video');
+      const videoDropzone = document.getElementById('video-dropzone');
+      const primaryAutoloadStatus = document.getElementById('primary-autoload-status');
+      const videoFileInput = document.getElementById('video-file-input');
+      const btnPlayPause = document.getElementById('btn-play-pause');
+      const btnMuteToggle = document.getElementById('btn-mute-toggle');
+      const videoScrubber = document.getElementById('video-scrubber');
+      const scrubberMarkers = document.getElementById('scrubber-markers');
+      const videoTimecode = document.getElementById('video-timecode');
+      const btnReplaceVideo = document.getElementById('btn-replace-video');
+      const cuePills = Array.from(document.querySelectorAll('.cue-pill'));
+
+      // Tab 1 Dedicated Diagrammatic HUD Layers (HUD 1, HUD 2, HUD 3) + 3-Pill Stepper
+      const gazeHudSwitcher = document.getElementById('gaze-hud-switcher');
+      const hudStepButtons = Array.from(document.querySelectorAll('.hud-step-btn'));
+      const gazeHudLayers = {
+        1: document.getElementById('gaze-hud-1'),
+        2: document.getElementById('gaze-hud-2'),
+        3: document.getElementById('gaze-hud-3'),
+      };
+      const acousticMeterCard = document.getElementById('acoustic-meter-card');
+
+      // Tab 2 Grammar Overlay Layer
+      const grammarOverlayLayer = document.getElementById('grammar-overlay-layer');
+
+      // Tab 3 Silent Comparison & Dual Scrubber Elements
+      const shieldsVideo = document.getElementById('shields-video');
+      const bsDropzone = document.getElementById('bs-dropzone');
+      const bsPlaceholder = document.getElementById('bs-placeholder');
+      const bsAutoloadStatus = document.getElementById('bs-autoload-status');
+      const bsFileInput = document.getElementById('bs-file-input');
+      const bsReplaceBtn = document.getElementById('bs-replace-btn');
+      const bsPlayheadBar = document.getElementById('bs-playhead-bar');
+
+      const sweeneySilentVideo = document.getElementById('sweeney-silent-video');
+      const ssDropzone = document.getElementById('ss-dropzone');
+      const ssPlaceholder = document.getElementById('ss-placeholder');
+      const ssAutoloadStatus = document.getElementById('ss-autoload-status');
+      const ssFileInput = document.getElementById('ss-file-input');
+      const ssReplaceBtn = document.getElementById('ss-replace-btn');
+      const ssPlayheadBar = document.getElementById('ss-playhead-bar');
+
+      const btnDualPlayPause = document.getElementById('btn-dual-play-pause');
+      const dualScrubber = document.getElementById('dual-scrubber');
+      const dualProgressReadout = document.getElementById('dual-progress-readout');
+      const dualCuePills = Array.from(document.querySelectorAll('.dual-cue-pill'));
+
+      // Tab 3 Click-to-Flip Cards
+      const flipCardScenes = Array.from(document.querySelectorAll('.flip-card-scene'));
+
+      /* =======================================================================
+         4. TAB INDICATOR & NAVIGATION
+         ======================================================================= */
+      function updateTabIndicator(buttonEl) {
+        if (!buttonEl || !primaryNav || !tabIndicator) return;
+        const navRect = primaryNav.getBoundingClientRect();
+        const btnRect = buttonEl.getBoundingClientRect();
+        const offsetX = btnRect.left - navRect.left;
+        tabIndicator.style.width = `${btnRect.width}px`;
+        tabIndicator.style.transform = `translateX(${offsetX}px)`;
+      }
+
+      function syncHeaderOverlayButton() {
+        if (activeTabIndex === 0) {
+          const isAnyGazeHudOpen = activeGazeHud > 0;
+          btnOverlayToggle.classList.remove('hidden');
+          btnOverlayToggle.textContent = 'Gaze overlay';
+          btnOverlayToggle.setAttribute('aria-pressed', String(isAnyGazeHudOpen));
+          if (isAnyGazeHudOpen) {
+            btnOverlayToggle.classList.add('border-[#C8B89D]', 'text-[#C8B89D]');
+            btnOverlayToggle.classList.remove('border-[#282B30]', 'text-[#F2EFE9]');
+          } else {
+            btnOverlayToggle.classList.remove('border-[#C8B89D]', 'text-[#C8B89D]');
+            btnOverlayToggle.classList.add('border-[#282B30]', 'text-[#F2EFE9]');
+          }
+        } else if (activeTabIndex === 1) {
+          btnOverlayToggle.classList.remove('hidden');
+          btnOverlayToggle.textContent = 'Grammar overlay';
+          btnOverlayToggle.setAttribute('aria-pressed', String(isGrammarOverlayActive));
+          if (isGrammarOverlayActive) {
+            btnOverlayToggle.classList.add('border-[#C8B89D]', 'text-[#C8B89D]');
+            btnOverlayToggle.classList.remove('border-[#282B30]', 'text-[#F2EFE9]');
+          } else {
+            btnOverlayToggle.classList.remove('border-[#C8B89D]', 'text-[#C8B89D]');
+            btnOverlayToggle.classList.add('border-[#282B30]', 'text-[#F2EFE9]');
+          }
+        } else {
+          btnOverlayToggle.classList.add('hidden');
+        }
+      }
+
+      function syncCuePillsForTab() {
+        cuePills.forEach((pill) => {
+          const pillTab = parseInt(pill.getAttribute('data-cue-tab'), 10);
+          const cueIdx = parseInt(pill.getAttribute('data-cue-index'), 10);
+          const beat = CUE_BEATS[cueIdx];
+
+          if (pillTab === activeTabIndex) {
+            pill.classList.remove('hidden');
+          } else {
+            pill.classList.add('hidden');
+          }
+
+          const isPillActive =
+            (activeTabIndex === 0 && beat && beat.gazeHud === activeGazeHud) ||
+            (activeTabIndex === 1 && pillTab === 1 && isGrammarOverlayActive);
+
+          pill.setAttribute('aria-pressed', String(isPillActive));
+          if (isPillActive) {
+            pill.classList.add('border-[#C8B89D]', 'bg-[#15171A]');
+            pill.classList.remove('border-[#282B30]', 'bg-[#0E0F11]');
+          } else {
+            pill.classList.remove('border-[#C8B89D]', 'bg-[#15171A]');
+            pill.classList.add('border-[#282B30]', 'bg-[#0E0F11]');
+          }
+        });
+      }
+
+      function syncVideoOverlayVisibility() {
+        // Tab 1: Show ONLY the single active HUD (1, 2, or 3) + minimal 3-pill HUD stepper
+        const isTab1HudOpen = activeTabIndex === 0 && activeGazeHud > 0;
+        if (gazeHudSwitcher) {
+          if (isTab1HudOpen) {
+            gazeHudSwitcher.classList.remove('hud-hidden');
+            gazeHudSwitcher.classList.add('hud-visible');
+          } else {
+            gazeHudSwitcher.classList.remove('hud-visible');
+            gazeHudSwitcher.classList.add('hud-hidden');
+          }
+        }
+
+        hudStepButtons.forEach((btn) => {
+          const stepNum = parseInt(btn.getAttribute('data-hud-step'), 10);
+          const isCurrent = isTab1HudOpen && stepNum === activeGazeHud;
+          btn.setAttribute('aria-pressed', String(isCurrent));
+          if (isCurrent) {
+            btn.classList.add('bg-[#0E0F11]/85', 'text-[#C8B89D]');
+            btn.classList.remove('text-[#9A9893]');
+          } else {
+            btn.classList.remove('bg-[#0E0F11]/85', 'text-[#C8B89D]');
+            btn.classList.add('text-[#9A9893]');
+          }
+        });
+
+        [1, 2, 3].forEach((hudNum) => {
+          const el = gazeHudLayers[hudNum];
+          if (!el) return;
+          if (activeTabIndex === 0 && activeGazeHud === hudNum) {
+            el.classList.remove('hud-hidden');
+            el.classList.add('hud-visible');
+          } else {
+            el.classList.remove('hud-visible');
+            el.classList.add('hud-hidden');
+          }
+        });
+
+        // Sync acoustic equalizer pulse state with primary video playback
+        if (acousticMeterCard) {
+          if (activeTabIndex === 0 && activeGazeHud === 2 && isPrimaryVideoLoaded && !primaryVideo.paused) {
+            acousticMeterCard.classList.add('eq-playing');
+          } else {
+            acousticMeterCard.classList.remove('eq-playing');
+          }
+        }
+
+        // Tab 2: Grammar overlay
+        if (activeTabIndex === 1 && isGrammarOverlayActive) {
+          grammarOverlayLayer.classList.remove('hud-hidden');
+          grammarOverlayLayer.classList.add('hud-visible');
+        } else {
+          grammarOverlayLayer.classList.remove('hud-visible');
+          grammarOverlayLayer.classList.add('hud-hidden');
+        }
+
+        syncHeaderOverlayButton();
+        syncCuePillsForTab();
+      }
+
+      function switchTab(index) {
+        if (index < 0 || index >= tabButtons.length) return;
+        activeTabIndex = index;
+
+        tabButtons.forEach((btn, idx) => {
+          const isSelected = idx === index;
+          btn.setAttribute('aria-selected', String(isSelected));
+          if (isSelected) {
+            btn.classList.remove('text-[#9A9893]');
+            btn.classList.add('text-[#F2EFE9]');
+            updateTabIndicator(btn);
+          } else {
+            btn.classList.remove('text-[#F2EFE9]');
+            btn.classList.add('text-[#9A9893]');
+          }
+        });
+
+        drawerPanes.forEach((pane, idx) => {
+          if (idx === index) {
+            pane.classList.remove('hidden', 'drawer-fade');
+            void pane.offsetWidth;
+            pane.classList.add('drawer-fade');
+          } else {
+            pane.classList.add('hidden');
+          }
+        });
+
+        if (index === 0 || index === 1) {
+          stopDualSyncLoop();
+          if (!shieldsVideo.paused) shieldsVideo.pause();
+          if (!sweeneySilentVideo.paused) sweeneySilentVideo.pause();
+
+          platformStagePane.classList.remove('stage-visible');
+          platformStagePane.classList.add('stage-hidden');
+          videoStagePane.classList.remove('stage-hidden');
+          videoStagePane.classList.add('stage-visible');
+        } else {
+          if (isPrimaryVideoLoaded && !primaryVideo.paused) {
+            primaryVideo.pause();
+          }
+
+          videoStagePane.classList.remove('stage-visible');
+          videoStagePane.classList.add('stage-hidden');
+          platformStagePane.classList.remove('stage-hidden');
+          platformStagePane.classList.add('stage-visible');
+
+          if (isDualPlaying) {
+            playDualVideos();
+          }
+          startDualSyncLoop();
+        }
+
+        syncVideoOverlayVisibility();
+      }
+
+      tabButtons.forEach((btn, idx) => {
+        btn.addEventListener('click', () => switchTab(idx));
+      });
+
+      window.addEventListener('resize', () => {
+        updateTabIndicator(tabButtons[activeTabIndex]);
+      });
+
+      /* =======================================================================
+         5. COLLAPSIBLE ANALYSIS DRAWER & HEADER OVERLAY BUTTON
+         ======================================================================= */
+      function toggleDrawer(forceState) {
+        isDrawerOpen = typeof forceState === 'boolean' ? forceState : !isDrawerOpen;
+        drawerToggleBtn.setAttribute('aria-expanded', String(isDrawerOpen));
+
+        if (isDrawerOpen) {
+          drawerEl.classList.add('drawer-open');
+          drawerToggleLabel.textContent = 'Hide analysis';
+          drawerToggleBtn.classList.add('border-[#C8B89D]');
+          drawerToggleBtn.classList.remove('border-[#282B30]');
+          drawerStatusDot.classList.remove('bg-[#9A9893]');
+          drawerStatusDot.classList.add('bg-[#C8B89D]');
+        } else {
+          drawerEl.classList.remove('drawer-open');
+          drawerToggleLabel.textContent = 'Show analysis';
+          drawerToggleBtn.classList.remove('border-[#C8B89D]');
+          drawerToggleBtn.classList.add('border-[#282B30]');
+          drawerStatusDot.classList.remove('bg-[#C8B89D]');
+          drawerStatusDot.classList.add('bg-[#9A9893]');
+        }
+      }
+
+      drawerToggleBtn.addEventListener('click', () => toggleDrawer());
+
+      function toggleActiveOverlay() {
+        if (activeTabIndex === 0) {
+          // Activate HUD 1 when toggled on with no active HUD; hide all HUDs when toggled off
+          activeGazeHud = activeGazeHud === 0 ? 1 : 0;
+          syncVideoOverlayVisibility();
+        } else if (activeTabIndex === 1) {
+          isGrammarOverlayActive = !isGrammarOverlayActive;
+          syncVideoOverlayVisibility();
+        }
+      }
+
+      btnOverlayToggle.addEventListener('click', toggleActiveOverlay);
+
+      // Minimal 3-pill HUD stepper inside Voyeurism stage
+      hudStepButtons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const stepNum = parseInt(btn.getAttribute('data-hud-step'), 10);
+          if ([1, 2, 3].includes(stepNum)) {
+            activeGazeHud = stepNum;
+            syncVideoOverlayVisibility();
+          }
+        });
+      });
+
+      /* =======================================================================
+         6. TIMESTAMPED CUE PILLS & SCRUBBER MARKER TICKS
+         - Clicking any pill seeks to exact timestamp, immediately starts
+           playback (primaryVideo.play()), and toggles ONLY that pill’s HUD.
+         ======================================================================= */
+      function getPrimaryDuration() {
+        return isPrimaryVideoLoaded && isFinite(primaryVideo.duration) && primaryVideo.duration > 0
+          ? primaryVideo.duration
+          : 15;
+      }
+
+      function renderScrubberMarkers() {
+        const dur = getPrimaryDuration();
+        scrubberMarkers.innerHTML = '';
+
+        CUE_BEATS.forEach((beat, idx) => {
+          const pct = Math.max(0, Math.min(100, (beat.time / dur) * 100));
+          const marker = document.createElement('button');
+          marker.type = 'button';
+          marker.title = beat.label;
+          marker.setAttribute('aria-label', `Jump to and play ${beat.label}`);
+          marker.style.left = `${pct}%`;
+          marker.className =
+            'pointer-events-auto absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-3.5 rounded-full bg-[#C8B89D] border border-[#0E0F11] hover:scale-125 transition-transform duration-150 cursor-pointer';
+          marker.addEventListener('click', (e) => {
+            e.stopPropagation();
+            activateCueBeat(idx);
+          });
+          scrubberMarkers.appendChild(marker);
+        });
+      }
+
+      function activateCueBeat(cueIdx) {
+        const beat = CUE_BEATS[cueIdx];
+        if (!beat) return;
+
+        const wasAlreadyActive =
+          activeTabIndex === beat.tab &&
+          ((beat.tab === 0 && activeGazeHud === beat.gazeHud) ||
+            (beat.tab === 1 && isGrammarOverlayActive));
+
+        if (activeTabIndex !== beat.tab) {
+          switchTab(beat.tab);
+        }
+
+        if (wasAlreadyActive) {
+          if (beat.tab === 0) {
+            activeGazeHud = 0;
+          } else if (beat.tab === 1) {
+            isGrammarOverlayActive = false;
+          }
+          syncVideoOverlayVisibility();
+          return;
+        }
+
+        // Seek to exact timestamp and immediately start playback
+        const dur = getPrimaryDuration();
+        const clampedTime = Math.max(0, Math.min(dur, beat.time));
+        const pct = dur > 0 ? (clampedTime / dur) * 100 : 0;
+
+        if (isPrimaryVideoLoaded) {
+          try {
+            primaryVideo.currentTime = clampedTime;
+          } catch (_) {
+            // Guard if metadata is still buffering
+          }
+
+          if (!userExplicitlyMutedPrimary) {
+            primaryVideo.muted = false;
+            syncPrimaryMuteButton();
+          }
+
+          primaryVideo.play().catch(() => {
+            primaryVideo.muted = true;
+            syncPrimaryMuteButton();
+            primaryVideo.play().catch(() => {});
+          });
+        }
+
+        updateScrubberFill(pct);
+        videoTimecode.textContent = `${formatTimeMMSS(clampedTime)} / ${formatTimeMMSS(dur)}`;
+
+        if (beat.tab === 0) {
+          activeGazeHud = beat.gazeHud;
+        } else if (beat.tab === 1) {
+          isGrammarOverlayActive = true;
+        }
+
+        syncVideoOverlayVisibility();
+      }
+
+      cuePills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const idx = parseInt(pill.getAttribute('data-cue-index'), 10);
+          if (!isNaN(idx)) activateCueBeat(idx);
+        });
+      });
+
+      /* =======================================================================
+         7. DRAG-AND-DROP HELPER
+         ======================================================================= */
+      function bindDropzone(dropzoneEl, inputEl, onFile) {
+        dropzoneEl.addEventListener('click', () => inputEl.click());
+
+        dropzoneEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            inputEl.click();
+          }
+        });
+
+        inputEl.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) onFile(file);
+          inputEl.value = '';
+        });
+
+        ['dragenter', 'dragover'].forEach((evtName) => {
+          dropzoneEl.addEventListener(evtName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzoneEl.classList.add('dropzone-active');
+          });
+        });
+
+        ['dragleave', 'drop'].forEach((evtName) => {
+          dropzoneEl.addEventListener(evtName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzoneEl.classList.remove('dropzone-active');
+          });
+        });
+
+        dropzoneEl.addEventListener('drop', (e) => {
+          const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+          if (file) onFile(file);
+        });
+      }
+
+      /* =======================================================================
+         8. RACE-CONDITION-FREE PRIMARY VIDEO ENGINE
+         ======================================================================= */
+      function formatTimeMMSS(seconds) {
+        if (!isFinite(seconds) || seconds < 0) return '00:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+
+      function updateScrubberFill(pct) {
+        const clamped = Math.max(0, Math.min(100, pct));
+        videoScrubber.value = clamped;
+        videoScrubber.style.background = `linear-gradient(to right, #C8B89D ${clamped}%, #282B30 ${clamped}%)`;
+      }
+
+      function syncPrimaryMuteButton() {
+        btnMuteToggle.textContent = primaryVideo.muted ? 'Unmute' : 'Mute';
+      }
+
+      function revealPrimaryVideo() {
+        if (isPrimaryVideoLoaded && !primaryVideo.classList.contains('hidden')) {
+          renderScrubberMarkers();
+          return;
+        }
+        isPrimaryVideoLoaded = true;
+        videoDropzone.classList.add('hidden');
+        primaryVideo.classList.remove('hidden');
+
+        btnPlayPause.textContent = primaryVideo.paused ? 'Play' : 'Pause';
+        syncPrimaryMuteButton();
+
+        const dur = getPrimaryDuration();
+        const cur = primaryVideo.currentTime || 0;
+        videoTimecode.textContent = `${formatTimeMMSS(cur)} / ${formatTimeMMSS(dur)}`;
+        updateScrubberFill(dur > 0 ? (cur / dur) * 100 : 0);
+        renderScrubberMarkers();
+      }
+
+      // Attach ALL lifecycle listeners BEFORE assigning primaryVideo.src
+      ['loadedmetadata', 'loadeddata', 'canplay'].forEach((evt) => {
+        primaryVideo.addEventListener(evt, revealPrimaryVideo);
+      });
+
+      primaryVideo.addEventListener('error', () => {
+        if (!isPrimaryVideoLoaded) {
+          primaryVideo.classList.add('hidden');
+          videoDropzone.classList.remove('hidden');
+          primaryAutoloadStatus.textContent =
+            'Auto-load skipped (place sydney.mp4 in same folder or drop file here)';
+          renderScrubberMarkers();
+        }
+      });
+
+      primaryVideo.addEventListener('play', () => {
+        btnPlayPause.textContent = 'Pause';
+        if (acousticMeterCard && activeTabIndex === 0 && activeGazeHud === 2) {
+          acousticMeterCard.classList.add('eq-playing');
+        }
+      });
+
+      primaryVideo.addEventListener('pause', () => {
+        btnPlayPause.textContent = 'Play';
+        if (acousticMeterCard) {
+          acousticMeterCard.classList.remove('eq-playing');
+        }
+      });
+
+      primaryVideo.addEventListener('timeupdate', () => {
+        if (isScrubbing) return;
+        const dur = getPrimaryDuration();
+        const cur = primaryVideo.currentTime || 0;
+        const pct = dur > 0 ? (cur / dur) * 100 : 0;
+        updateScrubberFill(pct);
+        videoTimecode.textContent = `${formatTimeMMSS(cur)} / ${formatTimeMMSS(dur)}`;
+      });
+
+      function togglePrimaryPlayPause() {
+        if (!isPrimaryVideoLoaded) return;
+        if (primaryVideo.paused) {
+          if (!userExplicitlyMutedPrimary) {
+            primaryVideo.muted = false;
+            syncPrimaryMuteButton();
+          }
+          primaryVideo.play().catch(() => {});
+        } else {
+          primaryVideo.pause();
+        }
+      }
+
+      function togglePrimaryMute() {
+        primaryVideo.muted = !primaryVideo.muted;
+        userExplicitlyMutedPrimary = primaryVideo.muted;
+        syncPrimaryMuteButton();
+      }
+
+      btnPlayPause.addEventListener('click', togglePrimaryPlayPause);
+      primaryVideo.addEventListener('click', togglePrimaryPlayPause);
+      btnMuteToggle.addEventListener('click', togglePrimaryMute);
+
+      videoScrubber.addEventListener('pointerdown', () => {
+        isScrubbing = true;
+      });
+
+      videoScrubber.addEventListener('input', () => {
+        const pct = parseFloat(videoScrubber.value) || 0;
+        updateScrubberFill(pct);
+        const dur = getPrimaryDuration();
+        const newTime = (pct / 100) * dur;
+        if (isPrimaryVideoLoaded && isFinite(primaryVideo.duration) && primaryVideo.duration > 0) {
+          primaryVideo.currentTime = newTime;
+        }
+        videoTimecode.textContent = `${formatTimeMMSS(newTime)} / ${formatTimeMMSS(dur)}`;
+      });
+
+      window.addEventListener('pointerup', () => {
+        isScrubbing = false;
+        isDualScrubbing = false;
+      });
+
+      function loadPrimaryVideoFile(file) {
+        if (!file) return;
+        if (primaryVideoObjectUrl) {
+          URL.revokeObjectURL(primaryVideoObjectUrl);
+        }
+        primaryVideoObjectUrl = URL.createObjectURL(file);
+        isPrimaryVideoLoaded = false;
+
+        primaryVideo.src = primaryVideoObjectUrl;
+        primaryVideo.muted = userExplicitlyMutedPrimary;
+        primaryVideo.load();
+        primaryVideo.play().catch(() => {});
+
+        // Sync Tab 3’s 2025 Sydney Sweeney silent loop if not loaded manually
+        if (!sweeneySilentController.isLoaded()) {
+          sweeneySilentController.setSource(primaryVideoObjectUrl);
+        }
+      }
+
+      bindDropzone(videoDropzone, videoFileInput, loadPrimaryVideoFile);
+      btnReplaceVideo.addEventListener('click', () => videoFileInput.click());
+
+      ['dragenter', 'dragover'].forEach((evtName) => {
+        primaryVideo.addEventListener(evtName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+
+      primaryVideo.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) loadPrimaryVideoFile(file);
+      });
+
+      /* =======================================================================
+         9. TAB 3 SILENT LOOP VIDEOS & SYNCHRONIZED DUAL-TIMELINE SCRUBBER
+         ======================================================================= */
+      function setupSilentLoopVideo(videoEl, placeholderEl, statusEl, replaceBtn, fallbackLabel) {
+        let loaded = false;
+
+        function reveal() {
+          if (loaded) return;
+          loaded = true;
+          placeholderEl.classList.add('hidden');
+          videoEl.classList.remove('hidden');
+          replaceBtn.classList.remove('hidden');
+          if (activeTabIndex === 2 && isDualPlaying) {
+            videoEl.play().catch(() => {});
+          }
+        }
+
+        ['loadedmetadata', 'loadeddata', 'canplay'].forEach((evt) => {
+          videoEl.addEventListener(evt, reveal);
+        });
+
+        videoEl.addEventListener('error', () => {
+          if (!loaded) {
+            videoEl.classList.add('hidden');
+            placeholderEl.classList.remove('hidden');
+            statusEl.textContent = fallbackLabel;
+          }
+        });
+
+        return {
+          setSource(url) {
+            loaded = false;
+            videoEl.src = url;
+            videoEl.load();
+            if (videoEl.readyState >= 1) reveal();
+          },
+          isLoaded() {
+            return loaded;
+          },
+        };
+      }
+
+      const shieldsController = setupSilentLoopVideo(
+        shieldsVideo,
+        bsPlaceholder,
+        bsAutoloadStatus,
+        bsReplaceBtn,
+        'Auto-load skipped (place brooke.mp4 in same folder or drop file here)'
+      );
+
+      const sweeneySilentController = setupSilentLoopVideo(
+        sweeneySilentVideo,
+        ssPlaceholder,
+        ssAutoloadStatus,
+        ssReplaceBtn,
+        'Auto-load skipped (place sydney.mp4 in same folder or drop file here)'
+      );
+
+      bindDropzone(bsDropzone, bsFileInput, (file) => {
+        if (shieldsObjectUrl) URL.revokeObjectURL(shieldsObjectUrl);
+        shieldsObjectUrl = URL.createObjectURL(file);
+        shieldsController.setSource(shieldsObjectUrl);
+      });
+      bsReplaceBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        bsFileInput.click();
+      });
+
+      bindDropzone(ssDropzone, ssFileInput, (file) => {
+        if (sweeneySilentObjectUrl) URL.revokeObjectURL(sweeneySilentObjectUrl);
+        sweeneySilentObjectUrl = URL.createObjectURL(file);
+        sweeneySilentController.setSource(sweeneySilentObjectUrl);
+      });
+      ssReplaceBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        ssFileInput.click();
+      });
+
+      function updateDualScrubberVisuals(pct) {
+        const clamped = Math.max(0, Math.min(100, pct));
+        dualScrubber.value = clamped;
+        dualScrubber.style.background = `linear-gradient(to right, #C8B89D ${clamped}%, #282B30 ${clamped}%)`;
+        bsPlayheadBar.style.width = `${clamped}%`;
+        ssPlayheadBar.style.width = `${clamped}%`;
+        dualProgressReadout.textContent = `Sync ${String(Math.round(clamped)).padStart(3, '0')}%`;
+      }
+
+      function seekDualVideosToPercent(pct) {
+        const clamped = Math.max(0, Math.min(100, pct));
+        const ratio = clamped / 100;
+
+        if (shieldsController.isLoaded() && isFinite(shieldsVideo.duration) && shieldsVideo.duration > 0) {
+          shieldsVideo.currentTime = ratio * shieldsVideo.duration;
+        }
+        if (
+          sweeneySilentController.isLoaded() &&
+          isFinite(sweeneySilentVideo.duration) &&
+          sweeneySilentVideo.duration > 0
+        ) {
+          sweeneySilentVideo.currentTime = ratio * sweeneySilentVideo.duration;
+        }
+
+        updateDualScrubberVisuals(clamped);
+      }
+
+      function playDualVideos() {
+        isDualPlaying = true;
+        btnDualPlayPause.textContent = 'Pause both';
+        if (shieldsController.isLoaded()) shieldsVideo.play().catch(() => {});
+        if (sweeneySilentController.isLoaded()) sweeneySilentVideo.play().catch(() => {});
+      }
+
+      function pauseDualVideos() {
+        isDualPlaying = false;
+        btnDualPlayPause.textContent = 'Play both';
+        if (!shieldsVideo.paused) shieldsVideo.pause();
+        if (!sweeneySilentVideo.paused) sweeneySilentVideo.pause();
+      }
+
+      function toggleDualPlayPause() {
+        if (isDualPlaying) {
+          pauseDualVideos();
+        } else {
+          playDualVideos();
+        }
+      }
+
+      btnDualPlayPause.addEventListener('click', toggleDualPlayPause);
+
+      dualScrubber.addEventListener('pointerdown', () => {
+        isDualScrubbing = true;
+      });
+
+      dualScrubber.addEventListener('input', () => {
+        const pct = parseFloat(dualScrubber.value) || 0;
+        seekDualVideosToPercent(pct);
+      });
+
+      dualCuePills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const pct = parseFloat(pill.getAttribute('data-dual-pct'));
+          if (!isNaN(pct)) {
+            pauseDualVideos();
+            seekDualVideosToPercent(pct);
+          }
+        });
+      });
+
+      function startDualSyncLoop() {
+        stopDualSyncLoop();
+        function step() {
+          if (activeTabIndex !== 2) return;
+          if (!isDualScrubbing && isDualPlaying) {
+            let pct = null;
+            if (
+              sweeneySilentController.isLoaded() &&
+              isFinite(sweeneySilentVideo.duration) &&
+              sweeneySilentVideo.duration > 0
+            ) {
+              pct = (sweeneySilentVideo.currentTime / sweeneySilentVideo.duration) * 100;
+            } else if (
+              shieldsController.isLoaded() &&
+              isFinite(shieldsVideo.duration) &&
+              shieldsVideo.duration > 0
+            ) {
+              pct = (shieldsVideo.currentTime / shieldsVideo.duration) * 100;
+            }
+            if (pct !== null) {
+              updateDualScrubberVisuals(pct);
+            }
+          }
+          dualSyncRafId = requestAnimationFrame(step);
+        }
+        dualSyncRafId = requestAnimationFrame(step);
+      }
+
+      function stopDualSyncLoop() {
+        if (dualSyncRafId !== null) {
+          cancelAnimationFrame(dualSyncRafId);
+          dualSyncRafId = null;
+        }
+      }
+
+      /* =======================================================================
+         10. CLICK-TO-FLIP “ALIBI VS. REBUTTAL” CARDS (TAB 3)
+         ======================================================================= */
+      flipCardScenes.forEach((cardScene) => {
+        function toggleFlip() {
+          const flipped = cardScene.classList.toggle('is-flipped');
+          cardScene.setAttribute('aria-pressed', String(flipped));
+        }
+
+        cardScene.addEventListener('click', toggleFlip);
+
+        cardScene.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleFlip();
+          }
+        });
+      });
+
+      /* =======================================================================
+         11. KEYBOARD NAVIGATION (1–3, ARROWS, SPACE, M, O, A)
+         ======================================================================= */
+      document.addEventListener('keydown', (e) => {
+        const tag = e.target && e.target.tagName;
+        if (tag === 'TEXTAREA' || e.target.isContentEditable) return;
+        if (tag === 'INPUT' && e.target.type !== 'range') return;
+
+        if (e.key === '1') {
+          switchTab(0);
+        } else if (e.key === '2') {
+          switchTab(1);
+        } else if (e.key === '3') {
+          switchTab(2);
+        } else if (
+          e.key === 'ArrowRight' &&
+          document.activeElement !== videoScrubber &&
+          document.activeElement !== dualScrubber
+        ) {
+          switchTab((activeTabIndex + 1) % tabButtons.length);
+        } else if (
+          e.key === 'ArrowLeft' &&
+          document.activeElement !== videoScrubber &&
+          document.activeElement !== dualScrubber
+        ) {
+          switchTab((activeTabIndex - 1 + tabButtons.length) % tabButtons.length);
+        } else if (e.key === 'm' || e.key === 'M') {
+          togglePrimaryMute();
+        } else if (e.key === 'o' || e.key === 'O') {
+          toggleActiveOverlay();
+        } else if (e.key === 'a' || e.key === 'A') {
+          toggleDrawer();
+        } else if (e.code === 'Space') {
+          const isInteractiveFocus =
+            tag === 'BUTTON' || (e.target && e.target.getAttribute('role') === 'button');
+          if (!isInteractiveFocus) {
+            e.preventDefault();
+            if (activeTabIndex === 0 || activeTabIndex === 1) {
+              togglePrimaryPlayPause();
+            } else if (activeTabIndex === 2) {
+              toggleDualPlayPause();
+            }
+          }
+        }
+      });
+
+      /* =======================================================================
+         12. INITIALISE UI, MARKER TICKS & TRIGGER RACE-FREE AUTO-LOADING
+         ======================================================================= */
+      requestAnimationFrame(() => {
+        updateTabIndicator(tabButtons[0]);
+      });
+
+      renderScrubberMarkers();
+      syncCuePillsForTab();
+      updateDualScrubberVisuals(0);
+
+      // Start #primary-video muted so browsers allow immediate frame decode & metadata load
+      primaryVideo.muted = true;
+      primaryVideo.src = 'sydney.mp4';
+      primaryVideo.load();
+      if (primaryVideo.readyState >= 1) {
+        revealPrimaryVideo();
+      }
+
+      // Auto-load Tab 3 silent loop slots
+      shieldsController.setSource('brooke.mp4');
+      sweeneySilentController.setSource('sydney.mp4');
+    });
+  </script>
+
+</body>
+</html>
